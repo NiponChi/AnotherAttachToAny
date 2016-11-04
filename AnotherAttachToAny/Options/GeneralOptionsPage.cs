@@ -80,7 +80,9 @@ namespace ArcDev.AnotherAttachToAny.Options
 										Username = key.GetStringValue(ATASettings.Keys.AttachDescriptorUsername, i),
 										IsUsernameRegex = key.GetBooleanValue(ATASettings.Keys.AttachDescriptorIsUsernameRegex, i),
 										AppPool = key.GetStringValue(ATASettings.Keys.AttachDescriptorAppPool, i),
-										IsAppPoolRegex = key.GetBooleanValue(ATASettings.Keys.AttachDescriptorIsAppPoolRegex, i)
+										IsAppPoolRegex = key.GetBooleanValue(ATASettings.Keys.AttachDescriptorIsAppPoolRegex, i),
+										CommandLine = key.GetStringValue(ATASettings.Keys.AttachDescriptorCommandLine, i),
+                                        IsCommandLineRegex = key.GetBooleanValue(ATASettings.Keys.AttachDescriptorIsCommandLineRegex, i)
 									});
 								}
 								else
@@ -139,7 +141,9 @@ namespace ArcDev.AnotherAttachToAny.Options
 							key.DeleteValue(ATASettings.Keys.AttachDescriptorIsUsernameRegex, i);
 							key.DeleteValue(ATASettings.Keys.AttachDescriptorAppPool, i);
 							key.DeleteValue(ATASettings.Keys.AttachDescriptorIsAppPoolRegex, i);
-						}
+                            key.DeleteValue(ATASettings.Keys.AttachDescriptorCommandLine, i);
+                            key.DeleteValue(ATASettings.Keys.AttachDescriptorIsCommandLineRegex, i);
+                        }
 						else
 						{
 							key.SetValue(ATASettings.Keys.AttachDescriptorName, i, item.Name);
@@ -151,7 +155,9 @@ namespace ArcDev.AnotherAttachToAny.Options
 							key.SetValue(ATASettings.Keys.AttachDescriptorIsUsernameRegex, i, item.IsUsernameRegex);
 							key.SetValue(ATASettings.Keys.AttachDescriptorAppPool, i, item.AppPool);
 							key.SetValue(ATASettings.Keys.AttachDescriptorIsAppPoolRegex, i, item.IsAppPoolRegex);
-						}
+                            key.SetValue(ATASettings.Keys.AttachDescriptorCommandLine, i, item.CommandLine);
+                            key.SetValue(ATASettings.Keys.AttachDescriptorIsCommandLineRegex, i, item.IsCommandLineRegex);
+                        }
 					}
 				}
 			}
@@ -227,7 +233,19 @@ namespace ArcDev.AnotherAttachToAny.Options
 						{
 							item.IsAppPoolRegex = parsedBool.Value;
 						}
-					}
+
+                        value = reader.ReadSettingString(ATASettings.Keys.AttachDescriptorCommandLine, i);
+                        if (value != null)
+                        {
+                            item.CommandLine = value;
+                        }
+
+                        parsedBool = reader.ReadSettingStringToBoolean(ATASettings.Keys.AttachDescriptorIsCommandLineRegex, i);
+                        if (parsedBool.HasValue)
+                        {
+                            item.IsCommandLineRegex = parsedBool.Value;
+                        }
+                    }
 					catch (Exception ex)
 					{
 						Debug.WriteLine($"Unhandled exception in LoadSettingsFromXml:{ex}");
@@ -276,7 +294,9 @@ namespace ArcDev.AnotherAttachToAny.Options
 				writer.WriteSettingString(ATASettings.Keys.AttachDescriptorIsUsernameRegex, i, item.IsUsernameRegex);
 				writer.WriteSettingString(ATASettings.Keys.AttachDescriptorAppPool, i, item.AppPool);
 				writer.WriteSettingString(ATASettings.Keys.AttachDescriptorIsAppPoolRegex, i, item.IsAppPoolRegex);
-			}
+                writer.WriteSettingString(ATASettings.Keys.AttachDescriptorCommandLine, i, item.CommandLine);
+                writer.WriteSettingString(ATASettings.Keys.AttachDescriptorIsCommandLineRegex, i, item.IsCommandLineRegex);
+            }
 
 			base.SaveSettingsToXml(writer);
 		}

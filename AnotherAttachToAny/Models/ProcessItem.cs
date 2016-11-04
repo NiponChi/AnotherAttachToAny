@@ -19,6 +19,8 @@ namespace ArcDev.AnotherAttachToAny.Models
 
 		public string DisplayText => GetDisplayText();
 
+        public string CommandLine => BaseProcess.GetCommandLine();
+
 		public int Id => BaseProcess.ProcessID;
 
 		public void Attach()
@@ -31,7 +33,7 @@ namespace ArcDev.AnotherAttachToAny.Models
 
 		private string GetDisplayText()
 		{
-			return string.IsNullOrWhiteSpace(Title) ? GetShortNameFormatted() : Title;
+			return GetShortNameFormatted();
 		}
 
 		private string GetShortNameFormatted()

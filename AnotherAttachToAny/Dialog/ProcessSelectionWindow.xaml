@@ -23,6 +23,8 @@
 					<GridView AllowsColumnReorder="False">
 						<GridViewColumn Header="Process Name" Width="Auto" DisplayMemberBinding="{Binding DisplayText}"/>
 						<GridViewColumn Header="Process ID" Width="120" DisplayMemberBinding="{Binding Id}"/>
+                        <GridViewColumn Header="Title" Width="120" DisplayMemberBinding="{Binding Title}"/>
+                        <GridViewColumn Header="Command Line" Width="240" DisplayMemberBinding="{Binding CommandLine}"/>
 					</GridView>
 				</ListView.View>
 			</ListView>

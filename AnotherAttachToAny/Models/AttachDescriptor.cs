@@ -17,6 +17,7 @@ namespace ArcDev.AnotherAttachToAny.Models
 			_processNameRegexesLazy = new Lazy<List<Regex>>(ProcessNamesToRegexes);
 			_usernameRegexLazy = new Lazy<Regex>(UsernameToRegex);
 			_appPoolRegexLazy = new Lazy<Regex>(AppPoolToRegex);
+            _commandLineRegexLazy = new Lazy<Regex>(CommandLineToRegex);
 
 			Enabled = true;
 			ProcessNames = new List<string>();
@@ -79,9 +80,21 @@ namespace ArcDev.AnotherAttachToAny.Models
 		[DefaultValue(false)]
 		public bool IsAppPoolRegex { get; set; }
 
+        [DisplayName("CommandLine")]
+        [Category("General")]
+        [Description("Process command line")]
+        public string CommandLine { get; set; }
+
+        [DisplayName("CommandLine is Regex")]
+        [Category("Regex Handling")]
+        [Description("Treat the CommandLine value as a regular expression.")]
+        [DefaultValue(false)]
+        public bool IsCommandLineRegex { get; set; }
+
 		private readonly Lazy<List<Regex>> _processNameRegexesLazy;
 		private readonly Lazy<Regex> _usernameRegexLazy;
 		private readonly Lazy<Regex> _appPoolRegexLazy;
+        private readonly Lazy<Regex> _commandLineRegexLazy;
 
 		private List<Regex> ProcessNamesToRegexes()
 		{
@@ -98,6 +111,11 @@ namespace ArcDev.AnotherAttachToAny.Models
 			return new Regex(Username);
 		}
 
+        private Regex CommandLineToRegex()
+        {
+            return new Regex(CommandLine);
+        }
+
 		[Browsable(false)]
 		internal List<Regex> ProcessNameRegexes => _processNameRegexesLazy.Value;
 
@@ -106,6 +124,9 @@ namespace ArcDev.AnotherAttachToAny.Models
 
 		[Browsable(false)]
 		internal Regex UsernameRegex => _usernameRegexLazy.Value;
+
+        [Browsable(false)]
+        internal Regex CommandLineRegex => _commandLineRegexLazy.Value;
 
 		[Browsable(false)]
 		internal char Shortcut { get; set; }

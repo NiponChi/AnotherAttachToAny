@@ -16,6 +16,8 @@ namespace ArcDev.AnotherAttachToAny.Options
 			public const string AttachDescriptorIsUsernameRegex = "AttachDescriptorIsUsernameRegex{0}";
 			public const string AttachDescriptorAppPool = "AttachDescriptorAppPool{0}";
 			public const string AttachDescriptorIsAppPoolRegex = "AttachDescriptorIsAppPoolRegex{0}";
+            public const string AttachDescriptorCommandLine = "AttachDescriptorCommandLine{0}";
+            public const string AttachDescriptorIsCommandLineRegex = "AttachDescriptorIsCommandLineRegex{0}";
 		}
 
 		public static List<AttachDescriptor> DefaultAttachables()

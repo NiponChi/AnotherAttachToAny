@@ -2,6 +2,7 @@
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Linq;
+using System.Management;
 using Microsoft.VisualStudio.Shell;
 using ArcDev.AnotherAttachToAny.Components;
 using ArcDev.AnotherAttachToAny.Extensions;
@@ -91,7 +92,8 @@ namespace ArcDev.AnotherAttachToAny
 		{
 			var rtn = IsProcessMatch(descriptor, process)
 			          && IsUsernameMatch(descriptor, process)
-			          && IsAppPoolMatch(descriptor, process);
+			          && IsAppPoolMatch(descriptor, process)
+                      && IsCommandLineMatch(descriptor, process);
 			return rtn;
 		}
 
@@ -148,5 +150,34 @@ namespace ArcDev.AnotherAttachToAny
 				? descriptor.AppPoolRegex.IsMatch(appPoolName)
 				: appPoolName.EndsWith(descriptor.AppPool, StringComparison.OrdinalIgnoreCase);
 		}
+
+	    protected bool IsCommandLineMatch(AttachDescriptor descriptor, Process process)
+	    {
+            if (string.IsNullOrEmpty(descriptor.CommandLine))
+            {
+                return true;
+            }
+
+            var commandLine = process.GetCommandLine();
+            if (string.IsNullOrEmpty(commandLine))
+            {
+                return false;
+            }
+
+            return descriptor.IsCommandLineRegex
+                ? descriptor.CommandLineRegex.IsMatch(commandLine)
+                : commandLine.Contains(descriptor.CommandLine);
+        }
+	}
+
+    public static class ProcessHelper
+    {
+        public static string GetCommandLine(this Process processs)
+        {
+            var commandLineSearcher = new ManagementObjectSearcher(
+                "SELECT CommandLine FROM Win32_Process WHERE ProcessId = " + processs.ProcessID);
+
+            return commandLineSearcher.Get().Cast<ManagementObject>().Aggregate("", (current, commandLineObject) => current + (String)commandLineObject["CommandLine"]);
+        }
 	}
 }
